@@ -16,6 +16,7 @@ export const Publisher = () => {
   const [videoMuted, setVideoMuted] = useState(false)
 
   const [localStream, setLocalStream] = useState<MediaStream>();
+  const socketRef = useRef<WebSocket>(new WebSocket("ws://192.168.0.183:5000/ws"))
 
   const localStreamRef = useRef<MediaStream>();
 
@@ -27,21 +28,50 @@ export const Publisher = () => {
       return;
     }
 
+    if (socketRef?.current.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
     peerConnection.current = new RTCPeerConnection({
       iceServers: []
     })
-
+    peerConnection.current.createDataChannel("ion-sfu");
     peerConnection.current?.addStream(localStreamRef.current);
 
     peerConnection.current.onsignalingstatechange = () => console.log(peerConnection.current?.signalingState)
-
+    peerConnection.current.onconnectionstatechange = () => console.log(peerConnection.current?.connectionState)
     peerConnection.current.onicecandidateerror = console.log
     peerConnection.current.onicecandidate = (event) => {
-      
+      if (event.candidate) {
+        socketRef.current?.send(JSON.stringify({
+          type: "tricle",
+          data: JSON.stringify({
+            "target": 0,
+            "candidates": event.candidate
+          })
+        }))
+      }
     }
 
     const offer = await peerConnection.current.createOffer();
     await peerConnection.current.setLocalDescription(offer);
+    socketRef.current.send(JSON.stringify({
+      "type": "offer",
+      "data": offer.sdp,
+    }))
+
+    socketRef.current.onmessage = async (e) => {
+      const response = JSON.parse(e.data)
+      if (response.type === "answer") {
+        await peerConnection.current?.setRemoteDescription(response)
+        console.log("set-remote-description")
+      }
+
+      if (response.candidate && response.target === 0) {
+        await peerConnection.current?.addIceCandidate(response.candidate);
+        console.log("add-ice-candidate");
+      }
+    }
 
   }
 
@@ -94,18 +124,18 @@ export const Publisher = () => {
           peerConnection.current?.close();
 
         }} />
-        <Button title={audiMuted? "UMA": "MA"} color="white" onPress={() => {
+        <Button title={audiMuted ? "UMA" : "MA"} color="white" onPress={() => {
           const localStreams = peerConnection.current?.getLocalStreams() || [];
-          for(const stream of localStreams){
+          for (const stream of localStreams) {
             stream.getAudioTracks().forEach(each => {
               each.enabled = audiMuted;
             })
           }
           setAudioMuted(m => !m);
         }} />
-        <Button title={videoMuted? "UMV": "MV"} color="white" onPress={() => {
+        <Button title={videoMuted ? "UMV" : "MV"} color="white" onPress={() => {
           const localStreams = peerConnection.current?.getLocalStreams() || [];
-          for(const stream of localStreams){
+          for (const stream of localStreams) {
             stream.getVideoTracks().forEach(each => {
               each.enabled = videoMuted;
             })
@@ -114,7 +144,7 @@ export const Publisher = () => {
         }} />
         <Button title="SC" color="white" onPress={() => {
           const localStreams = peerConnection.current?.getLocalStreams() || [];
-          for(const stream of localStreams){
+          for (const stream of localStreams) {
             stream.getVideoTracks().forEach(each => {
               // @ts-ignore
               // easiest way is to switch camera this way
