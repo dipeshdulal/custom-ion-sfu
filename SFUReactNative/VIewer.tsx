@@ -65,7 +65,7 @@ export const Viewer = () => {
         peerConnection.current.onicecandidate = (event) => {
             if (event.candidate) {
                 websocket.current?.send(JSON.stringify({
-                    type: "tricle",
+                    type: "trickle",
                     data: JSON.stringify({
                         "target": 1,
                         "candidates": event.candidate
