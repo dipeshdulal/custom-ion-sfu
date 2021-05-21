@@ -54,6 +54,7 @@ func main() {
 
 	load()
 
+	conf.WebRTC.SDPSemantics = "unified-plan-with-fallback"
 	s := sfu.NewSFU(conf)
 	s.NewDatachannel(sfu.APIChannelLabel)
 

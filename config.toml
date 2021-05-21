@@ -53,7 +53,7 @@ urls = ["stun:stun.l.google.com:19302"]
 # "unified-plan"
 # "plan-b"
 # "unified-plan-with-fallback"
-sdpsemantics = "unified-plan"
+sdpsemantics = "plan-b"
 # toggle multicast dns support: https://tools.ietf.org/html/draft-mdns-ice-candidates-00
 mdns = true
 
