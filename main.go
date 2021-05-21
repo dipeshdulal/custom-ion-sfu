@@ -55,6 +55,7 @@ func main() {
 	load()
 
 	conf.WebRTC.SDPSemantics = "unified-plan-with-fallback"
+
 	s := sfu.NewSFU(conf)
 	s.NewDatachannel(sfu.APIChannelLabel)
 
@@ -73,6 +74,8 @@ func NewWebsocketHandler(s *sfu.SFU) func(w http.ResponseWriter, req *http.Reque
 		}
 
 		peer := sfu.NewPeer(s)
+		peer.Join("room-id", uuid.NewString())
+
 		peer.OnOffer = func(sdp *webrtc.SessionDescription) {
 			if err := conn.WriteJSON(sdp); err != nil {
 				log.Println(err)
@@ -87,8 +90,6 @@ func NewWebsocketHandler(s *sfu.SFU) func(w http.ResponseWriter, req *http.Reque
 				log.Println(err)
 			}
 		}
-
-		peer.Join("room-id", uuid.NewString())
 
 		for {
 			wsMessage := WSMessage{}
