@@ -73,6 +73,12 @@ func NewWebsocketHandler(s *sfu.SFU) func(w http.ResponseWriter, req *http.Reque
 			return
 		}
 
+		defer func() {
+			if err := conn.Close(); err != nil {
+				log.Println("there is conn error: ", err)
+			}
+		}()
+
 		peer := sfu.NewPeer(s)
 		peer.Join("room-id", uuid.NewString())
 
@@ -93,8 +99,8 @@ func NewWebsocketHandler(s *sfu.SFU) func(w http.ResponseWriter, req *http.Reque
 
 		for {
 			wsMessage := WSMessage{}
-			if conn.ReadJSON(&wsMessage); err != nil {
-				log.Println(err)
+			if err := conn.ReadJSON(&wsMessage); err != nil {
+				log.Println("err: ", err.Error())
 				return
 			}
 

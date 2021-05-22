@@ -49,6 +49,8 @@ export const Publisher = () => {
     peerConnection.current.onaddstream = () => {
       console.log("new stream as been added")
     }
+    peerConnection.current.createDataChannel("ion-sfu")
+    console.log("localStream: ", localStreamRef.current)
     peerConnection.current?.addStream(localStreamRef.current);
     peerConnection.current.onsignalingstatechange = () => console.log("[publisher] signalingState: ", peerConnection.current?.signalingState)
     peerConnection.current.onconnectionstatechange = () => {
@@ -68,12 +70,11 @@ export const Publisher = () => {
     }
 
     const offer = await peerConnection.current.createOffer();
-    console.log(offer);
     await peerConnection.current.setLocalDescription(offer);
     setTimeout(() => {
       socketRef.current?.send(JSON.stringify({
         "type": "offer",
-        "data": offer.sdp,
+        "data": peerConnection.current?.localDescription.sdp
       }))
     }, 1000)
 

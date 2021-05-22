@@ -43,8 +43,6 @@ export const Sender = () => {
         }
 
         pcSend.current = new RTCPeerConnection();
-        pcSend.current.createDataChannel("ion-sfu");
-        
         pcSend.current.onconnectionstatechange = () => {
             console.log("state: ", pcSend.current?.connectionState)
             setConnectionState(pcSend.current?.connectionState);
