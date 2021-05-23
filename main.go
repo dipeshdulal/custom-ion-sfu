@@ -60,8 +60,8 @@ func main() {
 	s.NewDatachannel(sfu.APIChannelLabel)
 
 	http.HandleFunc("/ws", NewWebsocketHandler(s))
-	log.Println("server listening in :5000")
-	http.ListenAndServe(":5000", nil)
+	log.Println("server listening in :7000")
+	http.ListenAndServe(":7000", nil)
 }
 
 func NewWebsocketHandler(s *sfu.SFU) func(w http.ResponseWriter, req *http.Request) {

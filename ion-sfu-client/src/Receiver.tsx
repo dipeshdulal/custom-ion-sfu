@@ -9,7 +9,7 @@ export const Receiver = () => {
     const [connectionState, setConnectionState] = useState<string>();
 
     const handleStartPublishing = async () => {
-        websocket.current = new WebSocket("ws://localhost:5000/ws");
+        websocket.current = new WebSocket("ws://localhost:7000/ws");
         pcSend.current = new RTCPeerConnection();
 
         websocket.current.onopen = () => console.log("connection opened")

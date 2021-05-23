@@ -28,7 +28,7 @@ export const Publisher = () => {
       return;
     }
 
-    socketRef.current = new WebSocket("ws://192.168.0.183:5000/ws")
+    socketRef.current = new WebSocket("ws://192.168.0.183:7000/ws")
     socketRef.current.onmessage = async (e) => {
       const response = JSON.parse(e.data)
       if (response.type === "answer") {
@@ -44,14 +44,17 @@ export const Publisher = () => {
     }
 
     peerConnection.current = new RTCPeerConnection({
-      iceServers: []
+      iceServers: [],
+      sdpSemantics: "unified-plan",
     })
-    peerConnection.current.onaddstream = () => {
-      console.log("new stream as been added")
-    }
     peerConnection.current.createDataChannel("ion-sfu")
-    console.log("localStream: ", localStreamRef.current)
-    peerConnection.current?.addStream(localStreamRef.current);
+    for(const track of localStreamRef.current.getTracks()) {
+      peerConnection.current.addTransceiver(track, {
+        direction: "sendrecv",
+        streams: [localStreamRef.current]
+      })
+    }
+    // peerConnection.current?.addTransceiver(localStreamRef.current, {direction: "sendrecv", streams: [localStreamRef.current.]});
     peerConnection.current.onsignalingstatechange = () => console.log("[publisher] signalingState: ", peerConnection.current?.signalingState)
     peerConnection.current.onconnectionstatechange = () => {
       console.log("[publisher] connectionState: ", peerConnection.current?.connectionState)
@@ -91,7 +94,7 @@ export const Publisher = () => {
       }
 
       const media = await mediaDevices.getUserMedia({
-        audio: true,
+        audio: false,
         video: {
           facingMode: isFrontCamera ? "user" : "environment",
           mandatory: {

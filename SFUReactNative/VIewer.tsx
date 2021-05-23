@@ -21,7 +21,7 @@ export const Viewer = () => {
             iceServers: []
         })
 
-        websocket.current = new WebSocket("ws://192.168.0.183:5000/ws")
+        websocket.current = new WebSocket("ws://192.168.0.183:7000/ws")
         websocket.current.onopen = () => console.log("connection opened")
         websocket.current.onmessage = async (e) => {
             const response = JSON.parse(e.data)
