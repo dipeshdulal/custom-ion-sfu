@@ -50,10 +50,16 @@ export const Receiver = () => {
             console.log("streams: ", e.streams);
             setStreams((s) => {
                 if(e.streams.length==1 && e.streams[0].active) {
-                    s.push(e.streams[0])
+                    if(s.map(s => s.id).indexOf(e.streams[0].id) === -1) {
+                        s.push(e.streams[0])
+                    }
                 }
                 return s;
             })
+        }
+
+        pcSend.current.removeTrack = (e) => {
+            console.log("track has been removed", e.track)
         }
 
         pcSend.current.onicecandidate = (event) => {
