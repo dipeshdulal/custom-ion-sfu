@@ -254,8 +254,9 @@ PODS:
   - React-jsinspector (0.64.1)
   - react-native-safe-area-context (3.2.0):
     - React-Core
-  - react-native-webrtc (1.87.1):
+  - react-native-webrtc (1.89.1):
     - React-Core
+    - YUCIHighPassSkinSmoothing
   - React-perflogger (0.64.1)
   - React-RCTActionSheet (0.64.1):
     - React-Core/RCTActionSheetHeaders (= 0.64.1)
@@ -355,9 +356,12 @@ PODS:
     - Yoga
   - RNScreens (3.2.0):
     - React-Core
+  - Vivid (0.9)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
+  - YUCIHighPassSkinSmoothing (1.4):
+    - Vivid
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -429,7 +433,9 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
+    - Vivid
     - YogaKit
+    - YUCIHighPassSkinSmoothing
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -529,7 +535,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
-  react-native-webrtc: 40eca4cac200fda34fb843da07e3402211bbbd10
+  react-native-webrtc: 0d64e538871a1046d450e5ab1104bdd122e6e49c
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a
   React-RCTAnimation: ba0a1c3a2738be224a08092fa7f1b444ab77d309
@@ -546,8 +552,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: c277bfc4b5bb7c2fe977d19635df6f974f95dfd6
+  Vivid: 0fde7409beac71224deb151dd78f98a5bb860497
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+  YUCIHighPassSkinSmoothing: 8418fd1bf605ec22b647c57745b863b352f72097
 
 PODFILE CHECKSUM: eb9900e3726cebbde089807931fdfdab13f09d76
 

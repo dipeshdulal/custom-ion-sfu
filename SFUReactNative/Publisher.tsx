@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 
-import { mediaDevices, MediaStream, RTCPeerConnection, RTCView } from "react-native-webrtc";
+import { mediaDevices, MediaStream, RTCPeerConnection, RTCView, setCameraMuted } from "react-native-webrtc";
 
 export const Publisher = () => {
 
@@ -28,7 +28,7 @@ export const Publisher = () => {
       return;
     }
 
-    socketRef.current = new WebSocket("ws://192.168.0.183:7000/ws")
+    socketRef.current = new WebSocket("ws://ec2-18-181-195-202.ap-northeast-1.compute.amazonaws.com:7000/ws")
     socketRef.current.onmessage = async (e) => {
       const response = JSON.parse(e.data)
       if (response.type === "answer") {
@@ -48,7 +48,7 @@ export const Publisher = () => {
       sdpSemantics: "unified-plan",
     })
     peerConnection.current.createDataChannel("ion-sfu")
-    for(const track of localStreamRef.current.getTracks()) {
+    for (const track of localStreamRef.current.getTracks()) {
       peerConnection.current.addTransceiver(track, {
         direction: "sendrecv",
         streams: [localStreamRef.current]
@@ -94,7 +94,7 @@ export const Publisher = () => {
       }
 
       const media = await mediaDevices.getUserMedia({
-        audio: false,
+        audio: true,
         video: {
           facingMode: isFrontCamera ? "user" : "environment",
           mandatory: {
@@ -133,32 +133,26 @@ export const Publisher = () => {
 
         }} />
         <Button title={audiMuted ? "UMA" : "MA"} color="white" onPress={() => {
-          const localStreams = peerConnection.current?.getLocalStreams() || [];
-          for (const stream of localStreams) {
-            stream.getAudioTracks().forEach(each => {
-              each.enabled = audiMuted;
-            })
-          }
+          localStreamRef.current.getAudioTracks().forEach(each => {
+            each.enabled = audiMuted;
+          })
           setAudioMuted(m => !m);
         }} />
         <Button title={videoMuted ? "UMV" : "MV"} color="white" onPress={() => {
-          const localStreams = peerConnection.current?.getLocalStreams() || [];
-          for (const stream of localStreams) {
-            stream.getVideoTracks().forEach(each => {
+          setCameraMuted(!videoMuted)
+          setTimeout(() => {
+            localStreamRef.current.getVideoTracks().forEach(each => {
               each.enabled = videoMuted;
             })
-          }
+          }, 100)
           setVideoMuted(m => !m);
         }} />
         <Button title="SC" color="white" onPress={() => {
-          const localStreams = peerConnection.current?.getLocalStreams() || [];
-          for (const stream of localStreams) {
-            stream.getVideoTracks().forEach(each => {
-              // @ts-ignore
-              // easiest way is to switch camera this way
-              each._switchCamera();
-            })
-          }
+          localStreamRef.current.getVideoTracks().forEach(each => {
+            // @ts-ignore
+            // easiest way is to switch camera this way
+            each._switchCamera();
+          })
           setIsFrontCamera(c => !c);
         }} />
       </View>

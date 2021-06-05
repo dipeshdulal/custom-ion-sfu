@@ -5,7 +5,7 @@ import {
     View,
 } from 'react-native';
 
-import { MediaStream, RTCPeerConnection, RTCSessionDescriptionType, RTCView } from "react-native-webrtc";
+import { MediaStream, RTCPeerConnection, RTCView } from "react-native-webrtc";
 
 export const Viewer = () => {
 
@@ -45,12 +45,13 @@ export const Viewer = () => {
         }
 
 
-        peerConnection.current.onaddstream = (event) => {
-            console.log("on add stream")
-            setRemoteStream(event.stream)
+        peerConnection.current.onaddstream = (e) => {
+            // console.log("[viewer] on add stream", e.stream)
+            // setRemoteStream(e.stream.getTracks()[0])
+            setRemoteStream(e.stream)
         }
 
-        peerConnection.current.onremovestream = () => console.log("stream removed")
+        // peerConnection.current.onremovestream = () => console.log("stream removed")
 
         peerConnection.current.onconnectionstatechange = (event) => {
             console.log("state change connection: ", peerConnection.current?.connectionState)
