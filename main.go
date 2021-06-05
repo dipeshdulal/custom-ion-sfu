@@ -80,6 +80,8 @@ func NewWebsocketHandler(s *sfu.SFU) func(w http.ResponseWriter, req *http.Reque
 		}()
 
 		peer := sfu.NewPeer(s)
+		defer peer.Close()
+
 		peer.Join("room-id", uuid.NewString())
 
 		peer.OnOffer = func(sdp *webrtc.SessionDescription) {
