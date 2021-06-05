@@ -27,7 +27,7 @@ export const Sender = () => {
             return;
         }
 
-        websocket.current = new WebSocket("ws://localhost:7000/ws");
+        websocket.current = new WebSocket("ws://ec2-18-181-195-202.ap-northeast-1.compute.amazonaws.com:7000/ws");
         websocket.current.onopen = () => console.log("connection opened")
         websocket.current.onmessage = async (e) => {
             const response = JSON.parse(e.data)
