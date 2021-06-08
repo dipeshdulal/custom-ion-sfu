@@ -20,7 +20,7 @@
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.2.0",
-    "react-native-webrtc": "git+ssh://git@github.com:readytowork-org/react-native-webrtc.git#d271c6addfc51b227653eee1fd982faf5c66687b",
+    "react-native-webrtc": "git+ssh://git@github.com:readytowork-org/react-native-webrtc.git#6fb9cd9af265d6e3c964d9511134f27ddf4f507f",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
