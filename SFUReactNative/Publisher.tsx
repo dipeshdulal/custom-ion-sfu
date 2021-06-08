@@ -28,7 +28,7 @@ export const Publisher = () => {
       return;
     }
 
-    socketRef.current = new WebSocket("ws://ec2-18-181-195-202.ap-northeast-1.compute.amazonaws.com:7000/ws")
+    socketRef.current = new WebSocket("ws://192.168.0.183:7000/ws")
     socketRef.current.onmessage = async (e) => {
       const response = JSON.parse(e.data)
       if (response.type === "answer") {

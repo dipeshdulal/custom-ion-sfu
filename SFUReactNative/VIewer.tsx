@@ -18,7 +18,8 @@ export const Viewer = () => {
     const startStreaming = async () => {
 
         peerConnection.current = new RTCPeerConnection({
-            iceServers: []
+            iceServers: [],
+            sdpSemantics: "unified-plan",
         })
 
         websocket.current = new WebSocket("ws://192.168.0.183:7000/ws")
